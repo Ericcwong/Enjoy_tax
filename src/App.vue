@@ -9,30 +9,30 @@
     <table>
       <tr>
         <th>Date</th>
-        <th>Card Name</th>
-        <th>Net sale</th>
-        <th>Tax</th>
-        <th>Total</th>
+        <th>Visa</th>
+        <th>Amex</th>
+        <th>Master Card</th>
+        <th>Discover</th>
       </tr>
-      <tr v-for="transaction in state.loadedData" :key="transaction.cardName">
+      <tr v-for="transaction in state.groupedDates" :key="transaction.cardName">
         <td @change="totalCredit">{{ transaction.date }}</td>
-        <td>{{ transaction.cardName }}</td>
-        <td>{{ transaction.netSale }}</td>
-        <td>{{ transaction.tax }}</td>
-        <td>${{ transaction.total }}</td>
+        <td>{{ transaction.dayVisa }}</td>
+        <td>{{ transaction.dayAmex }}</td>
+        <td>{{ transaction.dayMasterCard }}</td>
+        <td>{{ transaction.dayDiscover }}</td>
       </tr>
     </table>
 
     <table>
       <tr>
         <th>Visa Total:</th>
-        <td>${{ state.visa }}</td>
+        <td>${{ state.visa.toFixed(2) }}</td>
         <th>AMEX Total:</th>
-        <td>${{ state.amex }}</td>
+        <td>${{ state.amex.toFixed(2) }}</td>
         <th>MasterCard Total:</th>
-        <td>${{ state.masterCard }}</td>
+        <td>${{ state.masterCard.toFixed(2) }}</td>
         <th>Discover Total:</th>
-        <td>${{ state.discover }}</td>
+        <td>${{ state.discover.toFixed(2) }}</td>
       </tr>
     </table>
   </div>
@@ -51,6 +51,7 @@ export default {
       amex: 0,
       masterCard: 0,
       discover: 0,
+      groupedDates: null,
     });
     const onFileChange = (e) => {
       const file = e.target.files[0];
@@ -73,7 +74,7 @@ export default {
             total: netSalePlusTax(element["Net Sales"], element.Tax),
           };
           state.loadedData.push(transaction);
-          // console.log(transaction);
+          console.log(transaction);
         });
       };
       const netSalePlusTax = (a, b) => {
@@ -95,7 +96,7 @@ export default {
               state.visa = state.visa + parseFloat(element.total);
           }
           switch (element.cardName) {
-            case "Amex":
+            case "American Express":
               // console.log(element.total);
               state.amex = state.amex + parseFloat(element.total);
           }
@@ -124,11 +125,41 @@ export default {
 
       // Edit: to add it in the array format instead
       const groupArrays = Object.keys(groups).map((date) => {
+        let cardName = groups[date];
+        let dayVisa = 0;
+        let dayAmex = 0;
+        let dayMasterCard = 0;
+        let dayDiscover = 0;
+
+        cardName.forEach((element) => {
+          switch (element.cardName) {
+            case "Visa":
+              dayVisa = dayVisa + parseFloat(element.total);
+          }
+          switch (element.cardName) {
+            case "American Express":
+              dayAmex = dayAmex + parseFloat(element.total);
+          }
+          switch (element.cardName) {
+            case "MasterCard":
+              dayMasterCard = dayMasterCard + parseFloat(element.total);
+          }
+          switch (element.cardName) {
+            case "Discover":
+              dayDiscover = dayDiscover + parseFloat(element.total);
+          }
+        });
+
         return {
           date,
           days: groups[date],
+          dayVisa: dayVisa.toFixed(2),
+          dayAmex: dayAmex.toFixed(2),
+          dayMasterCard: dayMasterCard.toFixed(2),
+          dayDiscover: dayDiscover.toFixed(2),
         };
       });
+      state.groupedDates = groupArrays;
       console.log(groups);
       console.log(groupArrays);
     };
