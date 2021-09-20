@@ -60,6 +60,7 @@ export default {
           // console.log(results.data);
           sortRequiredData(results.data);
           totalCredit();
+          daySort();
         },
       });
       const sortRequiredData = (data) => {
@@ -111,6 +112,27 @@ export default {
         });
       };
     };
+    const daySort = () => {
+      const groups = state.loadedData.reduce((groups, day) => {
+        const date = day.date;
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(day);
+        return groups;
+      }, {});
+
+      // Edit: to add it in the array format instead
+      const groupArrays = Object.keys(groups).map((date) => {
+        return {
+          date,
+          days: groups[date],
+        };
+      });
+      console.log(groups);
+      console.log(groupArrays);
+    };
+
     return { state, onFileChange };
   },
 };
