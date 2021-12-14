@@ -10,8 +10,8 @@
       <tr>
         <th>Date</th>
         <th>Visa</th>
-        <th>Amex</th>
         <th>Master Card</th>
+        <th>Amex</th>
         <th>Discover</th>
       </tr>
       <tr v-for="transaction in state.groupedDates" :key="transaction.cardName">
@@ -27,12 +27,20 @@
       <tr>
         <th>Visa Total:</th>
         <td>${{ state.visa.toFixed(2) }}</td>
-        <th>AMEX Total:</th>
-        <td>${{ state.amex.toFixed(2) }}</td>
         <th>MasterCard Total:</th>
         <td>${{ state.masterCard.toFixed(2) }}</td>
+        <th>AMEX Total:</th>
+        <td>${{ state.amex.toFixed(2) }}</td>
         <th>Discover Total:</th>
         <td>${{ state.discover.toFixed(2) }}</td>
+      </tr>
+      <tr>
+        Grand Total:
+        {{
+          (state.visa + state.amex + state.masterCard + state.discover).toFixed(
+            2
+          )
+        }}
       </tr>
     </table>
   </div>
@@ -174,5 +182,14 @@ table {
   border: 1px solid black;
   width: 100%;
   text-align: center;
+  font-size: 1.5rem;
+}
+tr {
+  border: 1px solid black;
+}
+/* td {
+  border-bottom: 1px solid black;
+} */
+tr:nth-child(odd) {
 }
 </style>
