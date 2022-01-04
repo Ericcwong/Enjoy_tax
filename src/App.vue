@@ -4,6 +4,7 @@
     <form action="">
       <input type="file" id="CSV" accept=".csv" @change="onFileChange" />
       <input type="submit" @click.prevent="loadCSV" />
+      <input type="button" value="Print Form" @click.prevent="window.print()" />
     </form>
 
     <table>
@@ -25,22 +26,29 @@
 
     <table>
       <tr>
+        <th>Grand Total:</th>
+
         <th>Visa Total:</th>
-        <td>${{ state.visa.toFixed(2) }}</td>
         <th>MasterCard Total:</th>
-        <td>${{ state.masterCard.toFixed(2) }}</td>
         <th>AMEX Total:</th>
-        <td>${{ state.amex.toFixed(2) }}</td>
         <th>Discover Total:</th>
-        <td>${{ state.discover.toFixed(2) }}</td>
       </tr>
       <tr>
-        Grand Total:
-        {{
-          (state.visa + state.amex + state.masterCard + state.discover).toFixed(
-            2
-          )
-        }}
+        <td>
+          $
+          {{
+            (
+              state.visa +
+              state.amex +
+              state.masterCard +
+              state.discover
+            ).toFixed(2)
+          }}
+        </td>
+        <td>${{ state.visa.toFixed(2) }}</td>
+        <td>${{ state.masterCard.toFixed(2) }}</td>
+        <td>${{ state.amex.toFixed(2) }}</td>
+        <td>${{ state.discover.toFixed(2) }}</td>
       </tr>
     </table>
   </div>
@@ -182,7 +190,7 @@ table {
   border: 1px solid black;
   width: 100%;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 tr {
   border: 1px solid black;
